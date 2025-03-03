@@ -1,0 +1,13 @@
+@use "../../styles/_button.scss" as button;
+@use "../../styles/_forms.scss" as forms;
+
+@include button.buttonStyles();
+@include forms.formStyles();
+
+.edit-course-form {
+  display: flex;
+  flex-direction: column;
+  padding: 0 15px 15px 15px;
+  color: white;
+}
+
