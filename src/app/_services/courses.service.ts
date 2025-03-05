@@ -1,9 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { Course } from '../_models/course';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { GetCourseResponse } from '../_models/getCourseResponse';
 import { firstValueFrom } from 'rxjs';
+import { SkipLoading } from './skipLoading';
 
 @Injectable({
   providedIn: 'root'
@@ -14,15 +15,18 @@ export class CoursesService {
   http = inject(HttpClient)
 
   async loadAllCoursesFetch(): Promise<Course[]> {
-    const response = await fetch(`${this.env.apiRoot}/courses`) // GET /api/courses
+    const response = await fetch(`${this.env.apiRoot}/courses`
+    ) // GET /api/courses
     const payload = await response.json()
     return payload.courses
   }
 
   async loadCoursesHttp(): Promise<Course[]> {
     const courses$ =
-      this.http.get<GetCourseResponse>(`${this.env.apiRoot}/courses`)
-
+      this.http.get<GetCourseResponse>(`${this.env.apiRoot}/courses`,
+        {
+          context: new HttpContext().set(SkipLoading, true)
+        })
     const response = await firstValueFrom(courses$)
     return response.courses
 
@@ -42,6 +46,14 @@ export class CoursesService {
 
   async deleteCourse(courseId: string): Promise<void> {
     await this.http.delete(`${this.env.apiRoot}/courses/${courseId}`)
+  }
+
+  async getCourseById(courseId: string): Promise<Course> {
+    const course$ =
+      this.http.get<Course>(`${this.env.apiRoot}/courses/${courseId}`)
+    const course = await firstValueFrom(course$)
+    // console.log('Course from service >>', course)
+    return course
   }
 
 

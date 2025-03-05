@@ -5,21 +5,36 @@ import { CoursesService } from './_services/courses.service';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink } from '@angular/router';
 
-import { CourseCardListComponent } from './course-card-list/course-card-list.component';
 import { MaterialModule } from './_shared/material.module';
 import { MatDialog } from '@angular/material/dialog';
+
 import { openEditCourseDialog } from './edit-course-dialog/edit-course-dialog.component';
+import { LoadingIndicatorComponent } from './loading/loading.component';
+import { MessagesComponent } from "./_shared/messages/messages.component";
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule, MatNavList } from '@angular/material/list';
+import { AuthService } from './_services/auth.service';
+import { MessagesService } from './_services/messages.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule,
-    MaterialModule, CourseCardListComponent
-  ],
+  imports: [CommonModule, LoadingIndicatorComponent,
+    MaterialModule, RouterLink,
+    MatSidenavModule, MatNavList, MatListModule,
+    RouterOutlet, MessagesComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+
+
+  authService = inject(AuthService);
+  messagesService = inject(MessagesService);
+
+  isLoggedIn = this.authService.isLoggedIn;
+
+
 
 
   #courses = signal<Course[]>([]);
@@ -46,10 +61,15 @@ export class AppComponent {
       console.log('Advanced Courses ', this.advancedCourses());
     }
     );
+
     this.loadCourses()
       .then(() => {
         console.log('Courses loaded');
       });
+  }
+
+  onLogout() {
+    this.authService.logout();
   }
 
   async onAddCourse() {
@@ -57,6 +77,10 @@ export class AppComponent {
     const newcourse = await openEditCourseDialog(this.dialog, {
       mode: 'create', title: 'Create Course'
     });
+
+    if (!newcourse) {
+      return;
+    }
 
     const courses = this.#courses();
     const newCourses = [...courses, newcourse];

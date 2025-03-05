@@ -1,6 +1,5 @@
-// @import "../../styles/button";
-
-// @include buttonStyles();
+@use "../../styles/button" as buttons;
+ @include buttons.buttonStyles();
 
 .course-card {
   margin: 20px 10px;
@@ -39,7 +38,7 @@
   margin-right: 5px;
 }
 
-.delete {
+.delete-icon {
   max-height: 30px;
   border-radius: 15px;
   margin-left: 5px;
@@ -49,3 +48,4 @@
   cursor: pointer;
 
 }
+

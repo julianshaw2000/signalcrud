@@ -1,0 +1,21 @@
+<div class="course-container">
+  <div class="course-header">
+    <h1>{{ course()?.title }}</h1>
+    <img [src]="course()?.iconUrl" alt="" class="course-image" />
+  </div>
+
+  <div class="table-container">
+    <table class="results-table">
+      @for (lesson of lessons(); track lesson.id) {
+      <tr>
+        <td>{{ lesson.description }}</td>
+        <td>{{ lesson.duration }}</td>
+        <td>
+          <button class="btn" (click)="onEditLesson(lesson)">Edit</button>
+          <button class="btn" (click)="onDeleteLesson(lesson)">Delete</button>
+        </td>
+      </tr>
+      }
+    </table>
+  </div>
+</div>

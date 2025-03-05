@@ -17,11 +17,13 @@
     <p>{{ course.longDescription }}</p>
   </div>
   <div class="course-actions">
-    <button class="btn">VIEW COURSE</button>
+    <button class="btn" [routerLink]="['courses', course.id]">
+      VIEW COURSE
+    </button>
     <button class="btn" (click)="onEditCourse(course)">EDIT</button>
     <img
       class="delete-icon"
-      src="assets/delete.svg"
+      src="assets/icons/delete.svg"
       (click)="onDeleteCourse(course)"
     />
   </div>

@@ -1,0 +1,36 @@
+<!-- <div *ngFor="let course of beginCourses()">
+  <div class="course">
+    <h2>{{ course.title }}</h2>
+    <p>{{ course.longDescription }}</p>
+  </div>
+</div>
+
+<H2>Advanced</H2>
+<div *ngFor="let course of advancedCourses()">
+  <div class="course">
+    <h2>{{ course.title }}</h2>
+    <p>{{ course.longDescription }}</p>
+  </div>
+</div> -->
+
+<div class="course-panel">
+  <h3>All Courses:</h3>
+  <button class="btn" (click)="onAddCourse()">Add Course</button>
+  <mat-tab-group>
+    <mat-tab label="Beginner">
+      <app-course-card-list
+        (courseUpdated)="onCourseUpdated($event)"
+        (courseDeleted)="onCourseDeleted($event)"
+        [courses]="beginCourses()"
+      />
+    </mat-tab>
+
+    <mat-tab label="Advanced">
+      <app-course-card-list
+        (courseUpdated)="onCourseUpdated($event)"
+        (courseDeleted)="onCourseDeleted($event)"
+        [courses]="advancedCourses()"
+      />
+    </mat-tab>
+  </mat-tab-group>
+</div>

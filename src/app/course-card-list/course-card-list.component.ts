@@ -3,11 +3,12 @@ import { Course } from '../_models/course';
 import { MaterialModule } from '../_shared/material.module';
 import { openEditCourseDialog } from '../edit-course-dialog/edit-course-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-course-card-list',
   imports: [
-    MaterialModule
+    MaterialModule, RouterModule
   ],
   templateUrl: './course-card-list.component.html',
   styleUrl: './course-card-list.component.scss'
@@ -28,6 +29,10 @@ export class CourseCardListComponent {
       title: 'Edit Course',
       course
     })
+
+    if (!newCourse) {
+      return
+    }
 
     console.log('New course', newCourse)
 
