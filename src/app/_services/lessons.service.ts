@@ -29,10 +29,6 @@ export class LessonsService {
       params = params.set('query', query)
     }
 
-    // const lessons$ =
-    //   this.http.get<GetLessonsResponse>(`${this.env.apiRoot}/courses/${courseId}/lessons`)
-
-    // http://localhost:9000/api/search-lessons?courseId=18
 
     const lessons$ = this.http.get<GetLessonsResponse>(
       `${this.env.apiRoot}/search-lessons`,
@@ -47,5 +43,15 @@ export class LessonsService {
     return response.lessons;
 
     // return []
+  }
+
+  async saveLesson(
+    lessonId: string,
+    changes: Partial<Lesson>): Promise<Lesson> {
+    const saveLesson$ = this.http.put<Lesson>(
+      `${this.env.apiRoot}/lessons/${lessonId}`,
+      changes
+    )
+    return firstValueFrom(saveLesson$);
   }
 }

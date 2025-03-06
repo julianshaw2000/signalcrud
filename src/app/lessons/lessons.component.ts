@@ -5,9 +5,10 @@ import { LessonDetailComponent } from './lesson-detail/lesson-detail.component';
 
 @Component({
   selector: 'app-lessons',
-  imports: [LessonDetailComponent],
+  standalone: true,
   templateUrl: './lessons.component.html',
-  styleUrl: './lessons.component.scss'
+  styleUrl: './lessons.component.scss',
+  imports: [LessonDetailComponent]
 })
 export class LessonsComponent {
   mode = signal<'master' | 'detail'>('master');
@@ -20,12 +21,30 @@ export class LessonsComponent {
 
   async onSearch() {
     const query = this.searchInput()?.nativeElement.value;
+
+    if (query.length < 3) return;
     const results = await this.lessonsService.loadLessons({ query });
     this.lessons.set(results);
   }
 
-  onLessonSelected(_t10: Lesson) {
-    throw new Error('Method not implemented.');
+
+
+  onLessonSelected(lesson: Lesson) {
+    this.mode.set('detail');
+    this.selectedLesson.set(lesson);
   }
 
+
+
+
+  onCancel() {
+    this.mode.set("master");
+  }
+
+  onLessonUpdated(lesson: Lesson) {
+    this.lessons.update(lessons =>
+      lessons.map(l => l.id === lesson.id ? lesson : l)
+    );
+
+  }
 }
